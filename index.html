@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Copy on Right Click</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+        /* Visual feedback styling */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        .toast.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <h1>Highlight and Right-Click Demo</h1>
+    <p>Highlight any part of this text and right-click on it. It will automatically be copied to your clipboard.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <script>
+        document.addEventListener('contextmenu', (event) => {
+            const selection = window.getSelection();
+            const selectedText = selection.toString();
+
+            // Only act if text is actually selected
+            if (selectedText.length > 0) {
+                navigator.clipboard.writeText(selectedText).then(() => {
+                    showToast();
+                }).catch(err => {
+                    console.error('Failed to copy text: ', err);
+                });
+            }
+        });
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
